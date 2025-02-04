@@ -20,8 +20,8 @@ BLUE = (0, 0, 255)      # J piece
 ORANGE = (255, 165, 0)  # L piece
 
 # Game settings
-FALL_SPEED = 1.0  # seconds per grid
-FAST_FALL_SPEED = 0.1  # seconds per grid
+FALL_SPEED = 0.5  # seconds per grid
+FAST_FALL_SPEED = 0.02  # seconds per grid
 
 # UI dimensions
 SIDEBAR_WIDTH = 6 * CELL_SIZE  # 6セル分の幅
