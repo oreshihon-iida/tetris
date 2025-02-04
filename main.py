@@ -21,10 +21,15 @@ def init_font():
     """Initialize game font with Japanese support."""
     for font_path in FONT_PATHS:
         try:
-            return pygame.font.Font(font_path, FONT_SIZE)
-        except (FileNotFoundError, OSError):
-            continue
-    return pygame.font.Font(None, FONT_SIZE)
+            font = pygame.font.Font(font_path, FONT_SIZE)
+            test_surface = font.render("テスト", True, WHITE)
+            if test_surface.get_width() > 0:
+                print(f"Successfully loaded font: {font_path}")
+                return font, True
+        except (FileNotFoundError, OSError) as e:
+            print(f"Failed to load font {font_path}: {e}")
+    print("Falling back to default font")
+    return pygame.font.Font(None, FONT_SIZE), False
 
 def main():
     """Initialize and run the Tetris game."""
@@ -38,7 +43,7 @@ def main():
     fall_time = 0
     fall_speed = FALL_SPEED
     game_over = False
-    font = init_font()
+    font, has_japanese = init_font()
 
     while True:
         if current_piece is None and not game_over:
@@ -103,7 +108,7 @@ def main():
                     (px, py, CELL_SIZE, CELL_SIZE), 1)
 
         if game_over:
-            text = font.render(GAME_OVER_TEXT, True, WHITE)
+            text = font.render(GAME_OVER_TEXT if has_japanese else GAME_OVER_TEXT_EN, True, WHITE)
             text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
             screen.blit(text, text_rect)
 

@@ -34,9 +34,10 @@ WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE + 2 * CELL_SIZE
 
 # Font settings
 FONT_PATHS = [
-    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",  # Primary
-    "/usr/share/fonts/truetype/fonts-japanese-gothic.ttf", # Fallback 1
-    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",       # Fallback 2
+    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",    # Primary
+    "/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf",   # Fallback 1
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",        # Fallback 2
 ]
 FONT_SIZE = 48
 GAME_OVER_TEXT = "ゲームオーバー"
+GAME_OVER_TEXT_EN = "GAME OVER"  # Fallback text for when Japanese fonts are unavailable
