@@ -31,3 +31,25 @@ LINES_OFFSET_Y = 8 * CELL_SIZE  # 行数表示の縦位置
 # Window dimensions
 WINDOW_WIDTH = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE + SIDEBAR_WIDTH
 WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE + 2 * CELL_SIZE
+
+# Font settings
+FONT_PATHS = [
+    # Linux paths
+    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",
+    "/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    # Windows paths
+    "C:/Windows/Fonts/msgothic.ttc",
+    "C:/Windows/Fonts/YuGothM.ttc",
+    "C:/Windows/Fonts/meiryo.ttc"
+]
+JAPANESE_FONT_NAMES = [
+    "MS Gothic",
+    "Yu Gothic",
+    "Meiryo",
+    "MS Mincho",
+    "Yu Mincho"
+]
+FONT_SIZE = 48
+GAME_OVER_TEXT = "ゲームオーバー"
+GAME_OVER_TEXT_EN = "GAME OVER"  # Fallback text for when Japanese fonts are unavailable
