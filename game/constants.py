@@ -34,9 +34,21 @@ WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE + 2 * CELL_SIZE
 
 # Font settings
 FONT_PATHS = [
-    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",    # Primary
-    "/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf",   # Fallback 1
-    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",        # Fallback 2
+    # Linux paths
+    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",
+    "/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    # Windows paths
+    "C:/Windows/Fonts/msgothic.ttc",
+    "C:/Windows/Fonts/YuGothM.ttc",
+    "C:/Windows/Fonts/meiryo.ttc"
+]
+JAPANESE_FONT_NAMES = [
+    "MS Gothic",
+    "Yu Gothic",
+    "Meiryo",
+    "MS Mincho",
+    "Yu Mincho"
 ]
 FONT_SIZE = 48
 GAME_OVER_TEXT = "ゲームオーバー"

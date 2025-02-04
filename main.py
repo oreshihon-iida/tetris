@@ -14,11 +14,14 @@ from game.constants import (
     WINDOW_WIDTH, WINDOW_HEIGHT,
     FALL_SPEED, FAST_FALL_SPEED,
     WHITE, GRAY, CELL_SIZE,
-    FONT_PATHS, FONT_SIZE, GAME_OVER_TEXT
+    FONT_PATHS, FONT_SIZE,
+    GAME_OVER_TEXT, GAME_OVER_TEXT_EN,
+    JAPANESE_FONT_NAMES
 )
 
 def init_font():
     """Initialize game font with Japanese support."""
+    # Try loading fonts from file paths first
     for font_path in FONT_PATHS:
         try:
             font = pygame.font.Font(font_path, FONT_SIZE)
@@ -28,6 +31,18 @@ def init_font():
                 return font, True
         except (FileNotFoundError, OSError) as e:
             print(f"Failed to load font {font_path}: {e}")
+    
+    # Try system fonts as fallback
+    for font_name in JAPANESE_FONT_NAMES:
+        try:
+            font = pygame.font.SysFont(font_name, FONT_SIZE)
+            test_surface = font.render("テスト", True, WHITE)
+            if test_surface.get_width() > 0:
+                print(f"Successfully loaded system font: {font_name}")
+                return font, True
+        except Exception as e:
+            print(f"Failed to load system font {font_name}: {e}")
+    
     print("Falling back to default font")
     return pygame.font.Font(None, FONT_SIZE), False
 
