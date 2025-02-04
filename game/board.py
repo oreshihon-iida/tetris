@@ -87,13 +87,15 @@ class Board:
         """Draw sidebar with next piece preview and lines cleared."""
         # Draw next piece preview
         if next_piece:
-            # サイドバーの左端（ゲームボードの右端）からマージンを取って配置
-            piece_width = max(len(next_piece.shape[0]), len(next_piece.shape)) * CELL_SIZE
+            # サイドバーの左端に配置（1セル分のマージン）
             sidebar_left = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE
-            preview_x = sidebar_left + CELL_SIZE
-            for x, y in next_piece.get_positions():
-                px = preview_x + (x * CELL_SIZE)
-                py = PREVIEW_OFFSET_Y + (y * CELL_SIZE)
+            preview_x = (sidebar_left + CELL_SIZE) // CELL_SIZE
+            preview_y = PREVIEW_OFFSET_Y // CELL_SIZE
+            
+            # プレビュー用の位置を使用して描画
+            for x, y in next_piece.get_preview_positions(preview_x, preview_y):
+                px = x * CELL_SIZE
+                py = y * CELL_SIZE
                 pygame.draw.rect(screen, next_piece.color,
                     (px, py, CELL_SIZE, CELL_SIZE))
                 pygame.draw.rect(screen, GRAY,
