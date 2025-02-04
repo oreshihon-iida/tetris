@@ -87,9 +87,10 @@ class Board:
         """Draw sidebar with next piece preview and lines cleared."""
         # Draw next piece preview
         if next_piece:
-            # サイドバーの中央にプレビューを配置
+            # サイドバーの左端（ゲームボードの右端）からマージンを取って配置
             piece_width = max(len(next_piece.shape[0]), len(next_piece.shape)) * CELL_SIZE
-            preview_x = WINDOW_WIDTH - SIDEBAR_WIDTH + (SIDEBAR_WIDTH - piece_width) // 2
+            sidebar_left = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE
+            preview_x = sidebar_left + CELL_SIZE
             for x, y in next_piece.get_positions():
                 px = preview_x + (x * CELL_SIZE)
                 py = PREVIEW_OFFSET_Y + (y * CELL_SIZE)
