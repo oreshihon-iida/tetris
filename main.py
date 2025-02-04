@@ -24,6 +24,7 @@ def main():
     clock = pygame.time.Clock()
     board = Board()
     current_piece = None
+    next_piece = Piece()
     fall_time = 0
     fall_speed = FALL_SPEED
     game_over = False
@@ -31,7 +32,8 @@ def main():
 
     while True:
         if current_piece is None and not game_over:
-            current_piece = Piece()
+            current_piece = next_piece
+            next_piece = Piece()
             if not board.is_valid_move(current_piece):
                 game_over = True
 
@@ -80,6 +82,7 @@ def main():
             fall_time = 0
 
         board.draw(screen)
+        board.draw_sidebar(screen, next_piece)
         if current_piece:
             for x, y in current_piece.get_positions():
                 px = (x * CELL_SIZE) + CELL_SIZE

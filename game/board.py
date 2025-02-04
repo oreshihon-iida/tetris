@@ -2,7 +2,9 @@
 import pygame
 from .constants import (
     GRID_WIDTH, GRID_HEIGHT, CELL_SIZE,
-    BLACK, WHITE, GRAY
+    BLACK, WHITE, GRAY,
+    WINDOW_WIDTH, SIDEBAR_WIDTH,
+    PREVIEW_OFFSET_Y, LINES_OFFSET_Y
 )
 
 class Board:
@@ -11,6 +13,7 @@ class Board:
         self.width = GRID_WIDTH
         self.height = GRID_HEIGHT
         self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        self.lines_cleared = 0  # 消した行数のカウンター
 
     def is_valid_move(self, piece) -> bool:
         """Check if the piece can move to its current position.
@@ -52,6 +55,7 @@ class Board:
                 lines_cleared += 1
             else:
                 y -= 1
+        self.lines_cleared += lines_cleared
         return lines_cleared
 
     def draw(self, screen: pygame.Surface) -> None:
@@ -78,3 +82,26 @@ class Board:
         pygame.draw.rect(screen, WHITE,
             (CELL_SIZE, CELL_SIZE,
              GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), 2)
+
+    def draw_sidebar(self, screen: pygame.Surface, next_piece: 'Piece') -> None:
+        """Draw sidebar with next piece preview and lines cleared."""
+        # Draw next piece preview
+        if next_piece:
+            preview_x = WINDOW_WIDTH - SIDEBAR_WIDTH + CELL_SIZE
+            for x, y in next_piece.get_positions():
+                px = preview_x + (x * CELL_SIZE)
+                py = PREVIEW_OFFSET_Y + (y * CELL_SIZE)
+                pygame.draw.rect(screen, next_piece.color,
+                    (px, py, CELL_SIZE, CELL_SIZE))
+                pygame.draw.rect(screen, GRAY,
+                    (px, py, CELL_SIZE, CELL_SIZE), 1)
+
+        # Draw lines cleared
+        font = pygame.font.Font(None, 36)
+        text = f"Lines: {self.lines_cleared}"
+        text_surface = font.render(text, True, WHITE)
+        text_rect = text_surface.get_rect(
+            centerx=WINDOW_WIDTH - SIDEBAR_WIDTH // 2,
+            centery=LINES_OFFSET_Y
+        )
+        screen.blit(text_surface, text_rect)

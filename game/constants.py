@@ -23,6 +23,11 @@ ORANGE = (255, 165, 0)  # L piece
 FALL_SPEED = 1.0  # seconds per grid
 FAST_FALL_SPEED = 0.1  # seconds per grid
 
+# UI dimensions
+SIDEBAR_WIDTH = 6 * CELL_SIZE  # 6セル分の幅
+PREVIEW_OFFSET_Y = 2 * CELL_SIZE  # プレビュー表示の縦位置
+LINES_OFFSET_Y = 8 * CELL_SIZE  # 行数表示の縦位置
+
 # Window dimensions
-WINDOW_WIDTH = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE  # Add padding
-WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE + 2 * CELL_SIZE  # Add padding
+WINDOW_WIDTH = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE + SIDEBAR_WIDTH
+WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE + 2 * CELL_SIZE
