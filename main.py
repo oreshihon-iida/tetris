@@ -13,8 +13,18 @@ from game.pieces import Piece
 from game.constants import (
     WINDOW_WIDTH, WINDOW_HEIGHT,
     FALL_SPEED, FAST_FALL_SPEED,
-    WHITE, GRAY, CELL_SIZE
+    WHITE, GRAY, CELL_SIZE,
+    FONT_PATHS, FONT_SIZE, GAME_OVER_TEXT
 )
+
+def init_font():
+    """Initialize game font with Japanese support."""
+    for font_path in FONT_PATHS:
+        try:
+            return pygame.font.Font(font_path, FONT_SIZE)
+        except (FileNotFoundError, OSError):
+            continue
+    return pygame.font.Font(None, FONT_SIZE)
 
 def main():
     """Initialize and run the Tetris game."""
@@ -28,7 +38,7 @@ def main():
     fall_time = 0
     fall_speed = FALL_SPEED
     game_over = False
-    font = pygame.font.Font(None, 48)
+    font = init_font()
 
     while True:
         if current_piece is None and not game_over:
@@ -93,7 +103,7 @@ def main():
                     (px, py, CELL_SIZE, CELL_SIZE), 1)
 
         if game_over:
-            text = font.render("ゲームオーバー", True, WHITE)
+            text = font.render(GAME_OVER_TEXT, True, WHITE)
             text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
             screen.blit(text, text_rect)
 

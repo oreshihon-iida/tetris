@@ -31,3 +31,12 @@ LINES_OFFSET_Y = 8 * CELL_SIZE  # 行数表示の縦位置
 # Window dimensions
 WINDOW_WIDTH = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE + SIDEBAR_WIDTH
 WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE + 2 * CELL_SIZE
+
+# Font settings
+FONT_PATHS = [
+    "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf",  # Primary
+    "/usr/share/fonts/truetype/fonts-japanese-gothic.ttf", # Fallback 1
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",       # Fallback 2
+]
+FONT_SIZE = 48
+GAME_OVER_TEXT = "ゲームオーバー"
