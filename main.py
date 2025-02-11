@@ -9,7 +9,7 @@ A PyGame-based game collection with:
 2. Puyo Puyo
    - Left/Right arrows: Move Puyo pair
    - Down arrow: Increase falling speed
-   - Z/X keys: Rotate counterclockwise/clockwise
+   - Up arrow: Rotate piece
 """
 import sys
 import pygame
@@ -175,11 +175,7 @@ def run_puyo():
                         current_pair.move(1, 0)
                         if not board.is_valid_move(current_pair):
                             current_pair.move(-1, 0)
-                    elif event.key == pygame.K_z:  # Rotate counterclockwise
-                        current_pair.rotate_counterclockwise()
-                        if not board.is_valid_move(current_pair):
-                            current_pair.rotate_clockwise()
-                    elif event.key == pygame.K_x:  # Rotate clockwise
+                    elif event.key == pygame.K_UP:
                         current_pair.rotate_clockwise()
                         if not board.is_valid_move(current_pair):
                             current_pair.rotate_counterclockwise()
