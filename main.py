@@ -6,10 +6,12 @@ A PyGame-based game collection with:
    - Left/Right arrows: Move piece
    - Down arrow: Increase falling speed
    - Up arrow: Rotate piece
+   - ESC: Return to game selection
 2. Puyo Puyo
    - Left/Right arrows: Move Puyo pair
    - Down arrow: Increase falling speed
    - Up arrow: Rotate piece
+   - ESC: Return to game selection
 """
 import sys
 import pygame
@@ -82,6 +84,8 @@ def run_tetris():
             if event.type == pygame.QUIT:  # pylint: disable=no-member
                 pygame.quit()  # pylint: disable=no-member
                 sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:  # pylint: disable=no-member
+                return
             if not game_over and current_piece:
                 if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
                     if event.key == pygame.K_LEFT:  # pylint: disable=no-member
@@ -165,6 +169,8 @@ def run_puyo():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return
             if not game_over and current_pair:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
