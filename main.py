@@ -236,7 +236,8 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Game Selection")
-    selector = GameSelector()
+    font, has_japanese = init_font()
+    selector = GameSelector(font, has_japanese)
     
     while True:
         for event in pygame.event.get():
