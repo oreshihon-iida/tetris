@@ -105,11 +105,9 @@ class PuyoBoard:
 
                 # Draw filled cells
                 if self.grid[y][x] is not None:
-                    pygame.draw.rect(screen, self.grid[y][x],
-                        (px, py, CELL_SIZE, CELL_SIZE))
                     pygame.draw.circle(screen, self.grid[y][x],
                         (px + CELL_SIZE//2, py + CELL_SIZE//2),
-                        CELL_SIZE//2 - 2)
+                        CELL_SIZE//2 - 1)
 
                 # Draw cell border
                 pygame.draw.rect(screen, GRAY,
@@ -130,11 +128,9 @@ class PuyoBoard:
             for x, y, color in next_pair.get_preview_positions(preview_x, preview_y):
                 px = x * CELL_SIZE
                 py = y * CELL_SIZE
-                pygame.draw.rect(screen, color,
-                    (px, py, CELL_SIZE, CELL_SIZE))
                 pygame.draw.circle(screen, color,
                     (px + CELL_SIZE//2, py + CELL_SIZE//2),
-                    CELL_SIZE//2 - 2)
+                    CELL_SIZE//2 - 1)
                 pygame.draw.rect(screen, GRAY,
                     (px, py, CELL_SIZE, CELL_SIZE), 1)
 

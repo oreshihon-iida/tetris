@@ -237,11 +237,9 @@ def run_puyo(audio_manager: AudioManager):
                 if y >= 0:  # Only draw if within visible area
                     px = (x * CELL_SIZE) + CELL_SIZE
                     py = (y * CELL_SIZE) + CELL_SIZE
-                    pygame.draw.rect(screen, color,
-                        (px, py, CELL_SIZE, CELL_SIZE))
                     pygame.draw.circle(screen, color,
                         (px + CELL_SIZE//2, py + CELL_SIZE//2),
-                        CELL_SIZE//2 - 2)
+                        CELL_SIZE//2 - 1)
                     pygame.draw.rect(screen, GRAY,
                         (px, py, CELL_SIZE, CELL_SIZE), 1)
 
