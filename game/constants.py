@@ -20,8 +20,8 @@ BLUE = (0, 0, 255)      # J piece
 ORANGE = (255, 165, 0)  # L piece
 
 # Game settings
-FALL_SPEED = 0.5  # seconds per grid
-FAST_FALL_SPEED = 0.02  # seconds per grid
+FALL_SPEED = 0.1  # seconds per grid
+FAST_FALL_SPEED = 0.004  # seconds per grid
 
 # UI dimensions
 SIDEBAR_WIDTH = 6 * CELL_SIZE  # 6セル分の幅
@@ -53,3 +53,9 @@ JAPANESE_FONT_NAMES = [
 FONT_SIZE = 48
 GAME_OVER_TEXT = "ゲームオーバー"
 GAME_OVER_TEXT_EN = "GAME OVER"  # Fallback text for when Japanese fonts are unavailable
+GAME_SELECT_TEXT = "ゲームを選択してください"
+GAME_SELECT_TEXT_EN = "SELECT GAME"
+TETRIS_TEXT = "1: テトリス"
+TETRIS_TEXT_EN = "1: TETRIS"
+PUYO_TEXT = "2: ぷよぷよ"
+PUYO_TEXT_EN = "2: PUYO PUYO"

@@ -1,0 +1,95 @@
+from typing import Dict, Optional
+import os
+import logging
+import pygame
+from pygame import mixer
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class AudioManager:
+    def __init__(self):
+        self._sounds: Dict[str, Optional[mixer.Sound]] = {}
+        self._current_music: Optional[str] = None
+        self._has_audio = False
+        self.initialize()
+
+    def initialize(self) -> None:
+        """Initialize audio system with fallback options."""
+        try:
+            # Try different buffer sizes if default fails
+            for buffer_size in [512, 1024, 2048, 4096]:
+                try:
+                    pygame.mixer.init(44100, -16, 2, buffer_size)
+                    self._has_audio = True
+                    logger.info(f"Audio initialized with buffer size: {buffer_size}")
+                    break
+                except pygame.error as e:
+                    logger.warning(f"Failed to initialize with buffer {buffer_size}: {e}")
+            
+            if not self._has_audio:
+                logger.warning("All audio initialization attempts failed")
+        except Exception as e:
+            logger.error(f"Audio system initialization failed: {e}")
+            self._has_audio = False
+        self._load_sounds()
+
+    def _load_sounds(self) -> None:
+        """Load sound effects with verification."""
+        sound_dir = os.path.join(os.path.dirname(__file__), '..', 'sounds')
+        if not os.path.exists(sound_dir):
+            logger.error(f"Sound directory not found: {sound_dir}")
+            return
+
+        sound_files = {
+            'rotate': 'rotate.wav',
+            'place': 'place.wav'
+        }
+        
+        for key, filename in sound_files.items():
+            path = os.path.join(sound_dir, filename)
+            if not os.path.exists(path):
+                logger.error(f"Sound file not found: {path}")
+                self._sounds[key] = None
+                continue
+                
+            try:
+                self._sounds[key] = mixer.Sound(path)
+            except pygame.error as e:
+                logger.error(f"Failed to load sound {filename}: {e}")
+                self._sounds[key] = None
+
+    def play_sound(self, sound_name: str) -> None:
+        if not self._has_audio:
+            return
+        if sound := self._sounds.get(sound_name):
+            sound.play()
+
+    def play_music(self, music_name: str) -> None:
+        """Play background music with verification."""
+        if not self._has_audio:
+            return
+            
+        if self._current_music == music_name:
+            return
+            
+        music_dir = os.path.join(os.path.dirname(__file__), '..', 'sounds')
+        music_file = os.path.join(music_dir, f"{music_name}.wav")
+        
+        if not os.path.exists(music_file):
+            logger.error(f"Music file not found: {music_file}")
+            self._current_music = None
+            return
+            
+        try:
+            mixer.music.load(music_file)
+            mixer.music.play(-1)  # -1 for infinite loop
+            self._current_music = music_name
+            logger.info(f"Playing music: {music_name}")
+        except pygame.error as e:
+            logger.error(f"Failed to load music {music_name}: {e}")
+            self._current_music = None
+
+    def stop_music(self) -> None:
+        mixer.music.stop()
+        self._current_music = None
