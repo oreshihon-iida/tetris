@@ -1,5 +1,9 @@
 """Board module for the Tetris game."""
+from typing import TYPE_CHECKING
 import pygame
+
+if TYPE_CHECKING:
+    from .pieces import Piece
 from .constants import (
     GRID_WIDTH, GRID_HEIGHT, CELL_SIZE,
     BLACK, WHITE, GRAY,

@@ -1,6 +1,9 @@
 """Board module for Puyo Puyo game."""
+from typing import List, Set, Tuple, Optional, TYPE_CHECKING
 import pygame
-from typing import List, Set, Tuple
+
+if TYPE_CHECKING:
+    from .puyo import PuyoPair
 from .constants import (
     GRID_WIDTH, GRID_HEIGHT, CELL_SIZE,
     BLACK, WHITE, GRAY,
@@ -117,7 +120,7 @@ class PuyoBoard:
             (CELL_SIZE, CELL_SIZE,
              GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), 2)
 
-    def draw_sidebar(self, screen: pygame.Surface, next_pair) -> None:
+    def draw_sidebar(self, screen: pygame.Surface, next_pair: Optional['PuyoPair']) -> None:
         """Draw sidebar with next Puyo pair preview and score."""
         if next_pair:
             sidebar_left = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE
