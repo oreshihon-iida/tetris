@@ -67,16 +67,34 @@ def create_sound_effect(name, freq, duration=0.2, sample_rate=44100):
         f.setframerate(sample_rate)
         f.writeframes(scaled.tobytes())
 
-# Create menu music (simpler theme)
-t = np.linspace(0, 2.0, int(44100 * 2.0))
-menu_data = np.sin(2 * np.pi * 440 * t) * 0.3 + np.sin(2 * np.pi * 880 * t) * 0.2
-menu_scaled = np.int16(menu_data * 32767)
+def create_dragon_quest_music(duration=4.0, sample_rate=44100):
+    # Dragon Quest style uses major scales and arpeggiated chords
+    t = np.linspace(0, duration, int(sample_rate * duration))
+    
+    # Main melody (typical Dragon Quest overworld theme style)
+    melody_freq = 440  # A4
+    melody = np.sin(2 * np.pi * melody_freq * t) * 0.3
+    
+    # Harmonics for orchestral feel
+    harmony1 = np.sin(2 * np.pi * (melody_freq * 1.25) * t) * 0.2  # Major third
+    harmony2 = np.sin(2 * np.pi * (melody_freq * 1.5) * t) * 0.15  # Perfect fifth
+    
+    # Slow arpeggios for medieval fantasy feel
+    arpeggio_pattern = [1, 1.25, 1.5, 2.0]  # Major chord
+    arpeggio = create_arpeggio(melody_freq/2, duration, arpeggio_pattern) * 0.25
+    
+    # Mix all components
+    data = melody + harmony1 + harmony2 + arpeggio
+    scaled = np.int16(data * 32767)
+    
+    with wave.open('sounds/menu.wav', 'w') as f:
+        f.setnchannels(1)
+        f.setsampwidth(2)
+        f.setframerate(sample_rate)
+        f.writeframes(scaled.tobytes())
 
-with wave.open('sounds/menu.wav', 'w') as f:
-    f.setnchannels(1)
-    f.setsampwidth(2)
-    f.setframerate(44100)
-    f.writeframes(menu_scaled.tobytes())
+# Create Dragon Quest style menu music
+create_dragon_quest_music()
 
 # Create Gradius-style game music
 create_gradius_style_music('tetris', 440)  # A4 as base frequency
