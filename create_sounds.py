@@ -45,8 +45,8 @@ def create_gradius_style_music(name, base_freq, duration=4.0, sample_rate=44100)
     # Add percussion
     drum_pattern = create_noise(duration)
     
-    # Mix all components
-    data = arpeggio * 0.4 + bass * 0.4 + drum_pattern
+    # Mix melodic components only (removed percussion)
+    data = arpeggio * 0.5 + bass * 0.5  # Adjusted mix levels for balance
     scaled = np.int16(data * 32767)
     
     with wave.open(f'sounds/{name}.wav', 'w') as f:
