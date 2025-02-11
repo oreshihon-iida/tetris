@@ -98,6 +98,7 @@ def run_tetris(audio_manager: AudioManager):
                 pygame.quit()  # pylint: disable=no-member
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:  # pylint: disable=no-member
+                audio_manager.play_music('menu')
                 return
             if not game_over and current_piece:
                 if event.type == pygame.KEYDOWN:  # pylint: disable=no-member
@@ -186,6 +187,7 @@ def run_puyo(audio_manager: AudioManager):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                audio_manager.play_music('menu')
                 return
             if not game_over and current_pair:
                 if event.type == pygame.KEYDOWN:
