@@ -1,15 +1,23 @@
 """
-Tetris Game Implementation
+Game Implementation
 
-A PyGame-based Tetris game with standard controls:
-- Left/Right arrows: Move piece
-- Down arrow: Increase falling speed
-- Up arrow: Rotate piece
+A PyGame-based game collection with:
+1. Tetris
+   - Left/Right arrows: Move piece
+   - Down arrow: Increase falling speed
+   - Up arrow: Rotate piece
+2. Puyo Puyo
+   - Left/Right arrows: Move Puyo pair
+   - Down arrow: Increase falling speed
+   - Z/X keys: Rotate counterclockwise/clockwise
 """
 import sys
 import pygame
 from game.board import Board
 from game.pieces import Piece
+from game.puyo_board import PuyoBoard
+from game.puyo import PuyoPair
+from game.game_selector import GameSelector
 from game.constants import (
     WINDOW_WIDTH, WINDOW_HEIGHT,
     FALL_SPEED, FAST_FALL_SPEED,
@@ -46,7 +54,7 @@ def init_font():
     print("Falling back to default font")
     return pygame.font.Font(None, FONT_SIZE), False
 
-def main():
+def run_tetris():
     """Initialize and run the Tetris game."""
     pygame.init()  # pylint: disable=no-member
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -127,6 +135,122 @@ def main():
             text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
             screen.blit(text, text_rect)
 
+        pygame.display.flip()
+
+def run_puyo():
+    """Initialize and run the Puyo Puyo game."""
+    pygame.init()
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pygame.display.set_caption("Puyo Puyo")
+    clock = pygame.time.Clock()
+    board = PuyoBoard()
+    current_pair = None
+    next_pair = PuyoPair()
+    fall_time = 0
+    fall_speed = FALL_SPEED
+    game_over = False
+    font, has_japanese = init_font()
+
+    while True:
+        if current_pair is None and not game_over:
+            current_pair = next_pair
+            next_pair = PuyoPair()
+            if not board.is_valid_move(current_pair):
+                game_over = True
+
+        fall_time += clock.get_rawtime()
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if not game_over and current_pair:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        current_pair.move(-1, 0)
+                        if not board.is_valid_move(current_pair):
+                            current_pair.move(1, 0)
+                    elif event.key == pygame.K_RIGHT:
+                        current_pair.move(1, 0)
+                        if not board.is_valid_move(current_pair):
+                            current_pair.move(-1, 0)
+                    elif event.key == pygame.K_z:  # Rotate counterclockwise
+                        current_pair.rotate_counterclockwise()
+                        if not board.is_valid_move(current_pair):
+                            current_pair.rotate_clockwise()
+                    elif event.key == pygame.K_x:  # Rotate clockwise
+                        current_pair.rotate_clockwise()
+                        if not board.is_valid_move(current_pair):
+                            current_pair.rotate_counterclockwise()
+                    elif event.key == pygame.K_DOWN:
+                        fall_speed = FAST_FALL_SPEED
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_DOWN:
+                        fall_speed = FALL_SPEED
+            elif game_over:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    board = PuyoBoard()
+                    current_pair = None
+                    game_over = False
+                    fall_speed = FALL_SPEED
+                    fall_time = 0
+
+        if not game_over and current_pair and fall_time >= fall_speed * 1000:
+            current_pair.move(0, 1)
+            if not board.is_valid_move(current_pair):
+                current_pair.move(0, -1)
+                board.merge_pair(current_pair)
+                while board.apply_gravity():
+                    pass
+                while board.clear_groups():
+                    while board.apply_gravity():
+                        pass
+                current_pair = None
+            fall_time = 0
+
+        board.draw(screen)
+        board.draw_sidebar(screen, next_pair)
+        if current_pair:
+            for x, y, color in current_pair.get_positions():
+                if y >= 0:  # Only draw if within visible area
+                    px = (x * CELL_SIZE) + CELL_SIZE
+                    py = (y * CELL_SIZE) + CELL_SIZE
+                    pygame.draw.rect(screen, color,
+                        (px, py, CELL_SIZE, CELL_SIZE))
+                    pygame.draw.circle(screen, color,
+                        (px + CELL_SIZE//2, py + CELL_SIZE//2),
+                        CELL_SIZE//2 - 2)
+                    pygame.draw.rect(screen, GRAY,
+                        (px, py, CELL_SIZE, CELL_SIZE), 1)
+
+        if game_over:
+            text = font.render(GAME_OVER_TEXT if has_japanese else GAME_OVER_TEXT_EN, True, WHITE)
+            text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+            screen.blit(text, text_rect)
+
+        pygame.display.flip()
+
+def main():
+    """Initialize and run the game selector."""
+    pygame.init()
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pygame.display.set_caption("Game Selection")
+    selector = GameSelector()
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+                
+            selected_game = selector.handle_input(event)
+            if selected_game == 'tetris':
+                run_tetris()
+            elif selected_game == 'puyo':
+                run_puyo()
+        
+        selector.draw(screen)
         pygame.display.flip()
 
 if __name__ == "__main__":
