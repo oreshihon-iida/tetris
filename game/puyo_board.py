@@ -20,7 +20,7 @@ class PuyoBoard:
         self.score = 0
         self.chain_count = 0
 
-    def is_valid_move(self, puyo_pair) -> bool:
+    def is_valid_move(self, puyo_pair: 'PuyoPair') -> bool:
         """Check if the Puyo pair can move to its current position."""
         for x, y, _ in puyo_pair.get_positions():
             if (x < 0 or x >= self.width or
@@ -29,7 +29,7 @@ class PuyoBoard:
                 return False
         return True
 
-    def merge_pair(self, puyo_pair) -> None:
+    def merge_pair(self, puyo_pair: 'PuyoPair') -> None:
         """Fix the Puyo pair in its current position on the board."""
         for x, y, color in puyo_pair.get_positions():
             if y >= 0:  # Only merge if within the grid

@@ -19,7 +19,7 @@ class Board:
         self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
         self.lines_cleared = 0  # 消した行数のカウンター
 
-    def is_valid_move(self, piece) -> bool:
+    def is_valid_move(self, piece: 'Piece') -> bool:
         """Check if the piece can move to its current position.
         
         Args:
@@ -35,7 +35,7 @@ class Board:
                 return False
         return True
 
-    def merge_piece(self, piece) -> None:
+    def merge_piece(self, piece: 'Piece') -> None:
         """Fix the piece in its current position on the board.
         
         Args:
