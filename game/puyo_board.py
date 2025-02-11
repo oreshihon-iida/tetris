@@ -24,8 +24,8 @@ class PuyoBoard:
         """Check if the Puyo pair can move to its current position."""
         for x, y, _ in puyo_pair.get_positions():
             if (x < 0 or x >= self.width or
-                y < 0 or y >= self.height or
-                (y >= 0 and self.grid[y][x] is not None)):
+                y >= self.height or
+                (y >= 0 and self.grid[y][x] is not None)):  # Only check grid collision when y >= 0
                 return False
         return True
 
