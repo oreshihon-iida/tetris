@@ -5,16 +5,24 @@ A PyGame-based game collection with:
 1. Tetris
    - Left/Right arrows: Move piece
    - Down arrow: Increase falling speed
-   - Up arrow: Rotate piece
+   - Up arrow: Rotate piece (with sound)
    - ESC: Return to game selection
+   - Background music during gameplay
 2. Puyo Puyo
    - Left/Right arrows: Move Puyo pair
    - Down arrow: Increase falling speed
-   - Up arrow: Rotate piece
+   - Up arrow: Rotate piece (with sound)
    - ESC: Return to game selection
+   - Background music during gameplay
+
+Features:
+- Background music in game selection screen
+- Sound effects for piece rotation and placement
+- Continuous background music during gameplay
 """
 import sys
 import pygame
+from game.audio import AudioManager
 from game.board import Board
 from game.pieces import Piece
 from game.puyo_board import PuyoBoard
@@ -28,6 +36,12 @@ from game.constants import (
     GAME_OVER_TEXT, GAME_OVER_TEXT_EN,
     JAPANESE_FONT_NAMES
 )
+
+def init_game():
+    """Initialize pygame and audio."""
+    pygame.mixer.init(44100, -16, 2, 512)
+    pygame.init()
+    return AudioManager()
 
 def init_font():
     """Initialize game font with Japanese support."""
@@ -56,9 +70,9 @@ def init_font():
     print("Falling back to default font")
     return pygame.font.Font(None, FONT_SIZE), False
 
-def run_tetris():
+def run_tetris(audio_manager: AudioManager):
     """Initialize and run the Tetris game."""
-    pygame.init()  # pylint: disable=no-member
+    audio_manager.play_music('tetris')
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Tetris")
     clock = pygame.time.Clock()
@@ -101,6 +115,8 @@ def run_tetris():
                         if not board.is_valid_move(current_piece):
                             for _ in range(3):  # 元の向きに戻す
                                 current_piece.rotate()
+                        else:
+                            audio_manager.play_sound('rotate')
                     elif event.key == pygame.K_DOWN:  # pylint: disable=no-member
                         fall_speed = FAST_FALL_SPEED
                 elif event.type == pygame.KEYUP:  # pylint: disable=no-member
@@ -119,6 +135,7 @@ def run_tetris():
             if not board.is_valid_move(current_piece):
                 current_piece.y -= 1
                 board.merge_piece(current_piece)
+                audio_manager.play_sound('place')
                 board.clear_lines()
                 current_piece = None
             fall_time = 0
@@ -141,9 +158,9 @@ def run_tetris():
 
         pygame.display.flip()
 
-def run_puyo():
+def run_puyo(audio_manager: AudioManager):
     """Initialize and run the Puyo Puyo game."""
-    pygame.init()
+    audio_manager.play_music('puyo')
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Puyo Puyo")
     clock = pygame.time.Clock()
@@ -185,6 +202,8 @@ def run_puyo():
                         current_pair.rotate_clockwise()
                         if not board.is_valid_move(current_pair):
                             current_pair.rotate_counterclockwise()
+                        else:
+                            audio_manager.play_sound('rotate')
                     elif event.key == pygame.K_DOWN:
                         fall_speed = FAST_FALL_SPEED
                 elif event.type == pygame.KEYUP:
@@ -203,6 +222,7 @@ def run_puyo():
             if not board.is_valid_move(current_pair):
                 current_pair.move(0, -1)
                 board.merge_pair(current_pair)
+                audio_manager.play_sound('place')
                 while board.apply_gravity():
                     pass
                 while board.clear_groups():
@@ -235,11 +255,13 @@ def run_puyo():
 
 def main():
     """Initialize and run the game selector."""
-    pygame.init()
+    audio_manager = init_game()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Game Selection")
     font, has_japanese = init_font()
     selector = GameSelector(font, has_japanese)
+    
+    audio_manager.play_music('menu')
     
     while True:
         for event in pygame.event.get():
@@ -249,9 +271,9 @@ def main():
                 
             selected_game = selector.handle_input(event)
             if selected_game == 'tetris':
-                run_tetris()
+                run_tetris(audio_manager)
             elif selected_game == 'puyo':
-                run_puyo()
+                run_puyo(audio_manager)
         
         selector.draw(screen)
         pygame.display.flip()
