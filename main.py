@@ -39,7 +39,6 @@ from game.constants import (
 
 def init_game():
     """Initialize pygame and audio."""
-    pygame.mixer.init(44100, -16, 2, 512)
     pygame.init()
     return AudioManager()
 

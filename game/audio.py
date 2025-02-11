@@ -7,10 +7,16 @@ class AudioManager:
     def __init__(self):
         self._sounds: Dict[str, Optional[mixer.Sound]] = {}
         self._current_music: Optional[str] = None
+        self._has_audio = False
         self.initialize()
 
     def initialize(self) -> None:
-        pygame.mixer.init(44100, -16, 2, 512)
+        try:
+            pygame.mixer.init(44100, -16, 2, 512)
+            self._has_audio = True
+        except pygame.error:
+            print("Warning: Audio initialization failed. Running without sound.")
+            self._has_audio = False
         self._load_sounds()
 
     def _load_sounds(self) -> None:
@@ -31,11 +37,13 @@ class AudioManager:
                 self._sounds[key] = None
 
     def play_sound(self, sound_name: str) -> None:
+        if not self._has_audio:
+            return
         if sound := self._sounds.get(sound_name):
             sound.play()
 
     def play_music(self, music_name: str) -> None:
-        if self._current_music == music_name:
+        if not self._has_audio or self._current_music == music_name:
             return
             
         music_dir = os.path.join(os.path.dirname(__file__), '..', 'sounds')
