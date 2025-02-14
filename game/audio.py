@@ -19,9 +19,23 @@ class AudioManager:
 
     def initialize(self) -> None:
         """Initialize audio system with fallback options."""
-        # Disable audio for testing
-        self._has_audio = False
-        logger.warning("Audio disabled for testing")
+        try:
+            # Try different buffer sizes if default fails
+            for buffer_size in [512, 1024, 2048, 4096]:
+                try:
+                    pygame.mixer.init(44100, -16, 2, buffer_size)
+                    self._has_audio = True
+                    logger.info(f"Audio initialized with buffer size: {buffer_size}")
+                    break
+                except pygame.error as e:
+                    logger.warning(f"Failed to initialize with buffer {buffer_size}: {e}")
+
+            if not self._has_audio:
+                logger.warning("All audio initialization attempts failed")
+        except Exception as e:
+            logger.error(f"Audio system initialization failed: {e}")
+            self._has_audio = False
+        self._load_sounds()
 
     def _load_sounds(self) -> None:
         """Load sound effects with verification."""
