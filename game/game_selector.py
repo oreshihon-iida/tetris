@@ -6,7 +6,8 @@ from .constants import (
     BLACK, WHITE,
     GAME_SELECT_TEXT, GAME_SELECT_TEXT_EN,
     TETRIS_TEXT, TETRIS_TEXT_EN,
-    PUYO_TEXT, PUYO_TEXT_EN
+    PUYO_TEXT, PUYO_TEXT_EN,
+    SETTINGS_TEXT, SETTINGS_TEXT_EN
 )
 
 class GameSelector:
@@ -15,11 +16,11 @@ class GameSelector:
         self.selected_game = None
         self.font = font
         self.has_japanese = has_japanese
-        
+
     def draw(self, screen: pygame.Surface) -> None:
         """Draw the game selection screen."""
         screen.fill(BLACK)
-        
+
         # Draw title
         title = self.font.render(
             GAME_SELECT_TEXT if self.has_japanese else GAME_SELECT_TEXT_EN,
@@ -27,7 +28,7 @@ class GameSelector:
         )
         title_rect = title.get_rect(centerx=WINDOW_WIDTH//2, centery=WINDOW_HEIGHT//3)
         screen.blit(title, title_rect)
-        
+
         # Draw game options
         tetris_text = self.font.render(
             TETRIS_TEXT if self.has_japanese else TETRIS_TEXT_EN,
@@ -37,22 +38,31 @@ class GameSelector:
             PUYO_TEXT if self.has_japanese else PUYO_TEXT_EN,
             True, WHITE
         )
-        
+
+        settings_text = self.font.render(
+            SETTINGS_TEXT if self.has_japanese else SETTINGS_TEXT_EN,
+            True, WHITE
+        )
+
         tetris_rect = tetris_text.get_rect(centerx=WINDOW_WIDTH//2, centery=WINDOW_HEIGHT//2)
         puyo_rect = puyo_text.get_rect(centerx=WINDOW_WIDTH//2, centery=WINDOW_HEIGHT//2 + 60)
-        
+        settings_rect = settings_text.get_rect(centerx=WINDOW_WIDTH//2, centery=WINDOW_HEIGHT//2 + 120)
+
         screen.blit(tetris_text, tetris_rect)
         screen.blit(puyo_text, puyo_rect)
-        
+        screen.blit(settings_text, settings_rect)
+
     def handle_input(self, event) -> Optional[str]:
         """Handle keyboard input for game selection.
-        
+
         Returns:
-            str: Selected game ('tetris', 'puyo', or None)
+            str: Selected game ('tetris', 'puyo', 'settings', or None)
         """
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
                 return 'tetris'
             elif event.key == pygame.K_2:
                 return 'puyo'
+            elif event.key == pygame.K_3:
+                return 'settings'
         return None

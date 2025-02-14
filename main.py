@@ -36,6 +36,7 @@ from game.constants import (
     GAME_OVER_TEXT, GAME_OVER_TEXT_EN,
     JAPANESE_FONT_NAMES
 )
+from game.settings import SettingsScreen
 
 def init_game():
     """Initialize pygame and audio."""
@@ -259,8 +260,11 @@ def main():
     pygame.display.set_caption("Game Selection")
     font, has_japanese = init_font()
     selector = GameSelector(font, has_japanese)
+    settings_screen = SettingsScreen(font, has_japanese, audio_manager)
     
     audio_manager.play_music('menu')
+    
+    current_screen = 'selector'
     
     while True:
         for event in pygame.event.get():
@@ -268,13 +272,22 @@ def main():
                 pygame.quit()
                 sys.exit()
                 
-            selected_game = selector.handle_input(event)
-            if selected_game == 'tetris':
-                run_tetris(audio_manager)
-            elif selected_game == 'puyo':
-                run_puyo(audio_manager)
+            if current_screen == 'selector':
+                selected = selector.handle_input(event)
+                if selected == 'tetris':
+                    run_tetris(audio_manager)
+                elif selected == 'puyo':
+                    run_puyo(audio_manager)
+                elif selected == 'settings':
+                    current_screen = 'settings'
+            elif current_screen == 'settings':
+                if settings_screen.handle_input(event):
+                    current_screen = 'selector'
         
-        selector.draw(screen)
+        if current_screen == 'selector':
+            selector.draw(screen)
+        else:
+            settings_screen.draw(screen)
         pygame.display.flip()
 
 if __name__ == "__main__":
