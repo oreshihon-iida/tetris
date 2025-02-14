@@ -61,7 +61,7 @@ class PuyoPair:
 
     def get_positions(self) -> List[Tuple[int, int, Tuple[int, int, int]]]:
         """Get the positions and colors of both Puyos.
-        
+
         Returns:
             List[Tuple[int, int, Tuple[int, int, int]]]: List of (x, y, color) for both Puyos
         """
@@ -72,11 +72,11 @@ class PuyoPair:
 
     def get_preview_positions(self, preview_x: int, preview_y: int) -> List[Tuple[int, int, Tuple[int, int, int]]]:
         """Get preview positions and colors for display.
-        
+
         Args:
             preview_x: X coordinate for preview
             preview_y: Y coordinate for preview
-            
+
         Returns:
             List[Tuple[int, int, Tuple[int, int, int]]]: List of (x, y, color) for preview
         """

@@ -37,7 +37,6 @@ class PuyoBoard:
 
     def apply_gravity(self) -> bool:
         """Apply gravity to make Puyos fall into empty spaces.
-        
         Returns:
             bool: True if any Puyo moved
         """
@@ -55,25 +54,20 @@ class PuyoBoard:
         if (x < 0 or x >= self.width or y < 0 or y >= self.height or
             self.grid[y][x] != color or (x, y) in visited):
             return []
-        
         visited.add((x, y))
         connected = [(x, y)]
-        
         # Check all four directions
         for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
             connected.extend(self.find_connected(x + dx, y + dy, color, visited))
-        
         return connected
 
     def clear_groups(self) -> bool:
         """Clear groups of 4 or more connected Puyos.
-        
         Returns:
             bool: True if any groups were cleared
         """
         visited = set()
         cleared = False
-        
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] is not None and (x, y) not in visited:
@@ -89,7 +83,6 @@ class PuyoBoard:
             self.chain_count += 1
         else:
             self.chain_count = 0
-            
         return cleared
 
     def draw(self, screen: pygame.Surface) -> None:
@@ -124,7 +117,6 @@ class PuyoBoard:
             sidebar_left = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE
             preview_x = (sidebar_left + CELL_SIZE) // CELL_SIZE
             preview_y = PREVIEW_OFFSET_Y // CELL_SIZE
-            
             for x, y, color in next_pair.get_preview_positions(preview_x, preview_y):
                 px = x * CELL_SIZE
                 py = y * CELL_SIZE

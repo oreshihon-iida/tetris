@@ -72,7 +72,7 @@ class Piece:
 
     def get_positions(self) -> List[Tuple[int, int]]:
         """Get the grid positions occupied by the piece.
-        
+
         Returns:
             List[Tuple[int, int]]: List of (x, y) coordinates occupied by the piece
         """
@@ -85,11 +85,11 @@ class Piece:
 
     def get_preview_positions(self, preview_x: int, preview_y: int) -> List[Tuple[int, int]]:
         """Get the grid positions for preview display.
-        
+
         Args:
             preview_x: X coordinate for preview display
             preview_y: Y coordinate for preview display
-            
+
         Returns:
             List[Tuple[int, int]]: List of (x, y) coordinates for preview display
         """

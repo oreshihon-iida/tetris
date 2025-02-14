@@ -21,7 +21,7 @@ class Board:
 
     def is_valid_move(self, piece: 'Piece') -> bool:
         """Check if the piece can move to its current position.
-        
+
         Args:
             piece: The piece to check
 
@@ -37,7 +37,7 @@ class Board:
 
     def merge_piece(self, piece: 'Piece') -> None:
         """Fix the piece in its current position on the board.
-        
+
         Args:
             piece: The piece to merge into the board
         """
@@ -46,7 +46,7 @@ class Board:
 
     def clear_lines(self) -> int:
         """Clear completed lines and return the number of lines cleared.
-        
+
         Returns:
             int: Number of lines cleared
         """
@@ -95,7 +95,7 @@ class Board:
             sidebar_left = GRID_WIDTH * CELL_SIZE + 2 * CELL_SIZE
             preview_x = (sidebar_left + CELL_SIZE) // CELL_SIZE
             preview_y = PREVIEW_OFFSET_Y // CELL_SIZE
-            
+
             # プレビュー用の位置を使用して描画
             for x, y in next_piece.get_preview_positions(preview_x, preview_y):
                 px = x * CELL_SIZE
