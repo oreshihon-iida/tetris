@@ -30,11 +30,12 @@ from game.puyo import PuyoPair
 from game.game_selector import GameSelector
 from game.constants import (
     WINDOW_WIDTH, WINDOW_HEIGHT,
-    FALL_SPEED, FAST_FALL_SPEED,
+    FAST_FALL_SPEED,
     WHITE, GRAY, CELL_SIZE,
     FONT_PATHS, FONT_SIZE,
     GAME_OVER_TEXT, GAME_OVER_TEXT_EN,
-    JAPANESE_FONT_NAMES
+    JAPANESE_FONT_NAMES,
+    calculate_fall_speed
 )
 from game.settings import SettingsScreen
 
@@ -80,7 +81,7 @@ def run_tetris(audio_manager: AudioManager):
     current_piece = None
     next_piece = Piece()
     fall_time = 0
-    fall_speed = FALL_SPEED
+    fall_speed = calculate_fall_speed(board.level)
     game_over = False
     font, has_japanese = init_font()
 
@@ -122,13 +123,13 @@ def run_tetris(audio_manager: AudioManager):
                         fall_speed = FAST_FALL_SPEED
                 elif event.type == pygame.KEYUP:  # pylint: disable=no-member
                     if event.key == pygame.K_DOWN:  # pylint: disable=no-member
-                        fall_speed = FALL_SPEED
+                        fall_speed = calculate_fall_speed(board.level)
             elif game_over:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # pylint: disable=no-member
                     board = Board()
                     current_piece = None
                     game_over = False
-                    fall_speed = FALL_SPEED
+                    fall_speed = calculate_fall_speed(0)  # Reset to level 0 speed
                     fall_time = 0
 
         if not game_over and current_piece and fall_time >= fall_speed * 1000:
@@ -138,6 +139,7 @@ def run_tetris(audio_manager: AudioManager):
                 board.merge_piece(current_piece)
                 audio_manager.play_sound('place')
                 board.clear_lines()
+                fall_speed = calculate_fall_speed(board.level)
                 current_piece = None
             fall_time = 0
 
@@ -169,7 +171,7 @@ def run_puyo(audio_manager: AudioManager):
     current_pair = None
     next_pair = PuyoPair()
     fall_time = 0
-    fall_speed = FALL_SPEED
+    fall_speed = calculate_fall_speed(0)  # Puyo doesn't use levels yet
     game_over = False
     font, has_japanese = init_font()
 
@@ -210,13 +212,13 @@ def run_puyo(audio_manager: AudioManager):
                         fall_speed = FAST_FALL_SPEED
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_DOWN:
-                        fall_speed = FALL_SPEED
+                        fall_speed = calculate_fall_speed(0)  # Puyo doesn't use levels yet
             elif game_over:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     board = PuyoBoard()
                     current_pair = None
                     game_over = False
-                    fall_speed = FALL_SPEED
+                    fall_speed = calculate_fall_speed(0)  # Reset to initial speed
                     fall_time = 0
 
         if not game_over and current_pair and fall_time >= fall_speed * 1000:

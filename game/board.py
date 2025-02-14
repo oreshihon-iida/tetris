@@ -1,15 +1,16 @@
 """Board module for the Tetris game."""
 from typing import TYPE_CHECKING
 import pygame
-
-if TYPE_CHECKING:
-    from .pieces import Piece
 from .constants import (
     GRID_WIDTH, GRID_HEIGHT, CELL_SIZE,
     BLACK, WHITE, GRAY,
     WINDOW_WIDTH, SIDEBAR_WIDTH,
-    PREVIEW_OFFSET_Y, LINES_OFFSET_Y
+    PREVIEW_OFFSET_Y, LINES_OFFSET_Y,
+    LINES_PER_LEVEL, MAX_LEVEL
 )
+
+if TYPE_CHECKING:
+    from .pieces import Piece
 
 class Board:
     """Represents the Tetris game board and handles drawing."""
@@ -18,6 +19,7 @@ class Board:
         self.height = GRID_HEIGHT
         self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
         self.lines_cleared = 0  # 消した行数のカウンター
+        self.level = 0  # Current level based on lines cleared
 
     def is_valid_move(self, piece: 'Piece') -> bool:
         """Check if the piece can move to its current position.
@@ -60,6 +62,7 @@ class Board:
             else:
                 y -= 1
         self.lines_cleared += lines_cleared
+        self.level = min(self.lines_cleared // LINES_PER_LEVEL, MAX_LEVEL)
         return lines_cleared
 
     def draw(self, screen: pygame.Surface) -> None:
@@ -105,12 +108,20 @@ class Board:
                 pygame.draw.rect(screen, GRAY,
                     (px, py, CELL_SIZE, CELL_SIZE), 1)
 
-        # Draw lines cleared
+        # Draw lines cleared and level
         font = pygame.font.Font(None, 36)
-        text = f"Lines: {self.lines_cleared}"
-        text_surface = font.render(text, True, WHITE)
-        text_rect = text_surface.get_rect(
+        lines_text = f"Lines: {self.lines_cleared}"
+        lines_surface = font.render(lines_text, True, WHITE)
+        lines_rect = lines_surface.get_rect(
             centerx=WINDOW_WIDTH - SIDEBAR_WIDTH // 2,
             centery=LINES_OFFSET_Y
         )
-        screen.blit(text_surface, text_rect)
+        screen.blit(lines_surface, lines_rect)
+
+        level_text = f"Level: {self.level}"
+        level_surface = font.render(level_text, True, WHITE)
+        level_rect = level_surface.get_rect(
+            centerx=WINDOW_WIDTH - SIDEBAR_WIDTH // 2,
+            centery=LINES_OFFSET_Y + 40
+        )
+        screen.blit(level_surface, level_rect)
