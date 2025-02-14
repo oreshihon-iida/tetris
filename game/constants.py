@@ -20,8 +20,21 @@ BLUE = (0, 0, 255)      # J piece
 ORANGE = (255, 165, 0)  # L piece
 
 # Game settings
-FALL_SPEED = 0.1  # seconds per grid
+BASE_FALL_SPEED = 0.1  # seconds per grid
 FAST_FALL_SPEED = 0.004  # seconds per grid
+
+# Level settings
+LINES_PER_LEVEL = 10  # Number of lines to clear for level up
+MAX_LEVEL = 20  # Maximum level (20G)
+
+def calculate_fall_speed(level: int) -> float:
+    """Calculate fall speed based on level.
+    
+    Speed increases exponentially with level, maxing out at 20G (0.05/60 seconds per grid)
+    """
+    if level >= MAX_LEVEL:
+        return 0.05/60  # 20G speed
+    return BASE_FALL_SPEED * (0.8 ** level)
 
 # UI dimensions
 SIDEBAR_WIDTH = 6 * CELL_SIZE  # 6セル分の幅
