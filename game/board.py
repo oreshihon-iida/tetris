@@ -6,7 +6,7 @@ from .constants import (
     BLACK, WHITE, GRAY,
     WINDOW_WIDTH, SIDEBAR_WIDTH,
     PREVIEW_OFFSET_Y, LINES_OFFSET_Y,
-    LINES_PER_LEVEL, MAX_LEVEL
+    MAX_LEVEL, SETTINGS
 )
 
 if TYPE_CHECKING:
@@ -62,7 +62,7 @@ class Board:
             else:
                 y -= 1
         self.lines_cleared += lines_cleared
-        self.level = min(self.lines_cleared // LINES_PER_LEVEL, MAX_LEVEL)
+        self.level = min(self.lines_cleared // SETTINGS.lines_per_level, MAX_LEVEL)
         return lines_cleared
 
     def draw(self, screen: pygame.Surface) -> None:
