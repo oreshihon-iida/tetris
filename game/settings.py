@@ -78,7 +78,7 @@ class SettingsScreen:
         )
         title_rect = title.get_rect(
             centerx=WINDOW_WIDTH//2,
-            centery=WINDOW_HEIGHT//3
+            centery=WINDOW_HEIGHT//4
         )
         screen.blit(title, title_rect)
 
