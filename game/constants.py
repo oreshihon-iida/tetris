@@ -24,8 +24,21 @@ BASE_FALL_SPEED = 0.1  # seconds per grid
 FAST_FALL_SPEED = 0.004  # seconds per grid
 
 # Level settings
-LINES_PER_LEVEL = 10  # Number of lines to clear for level up
+DEFAULT_LINES_PER_LEVEL = 10  # Default number of lines to clear for level up
+MIN_LINES_PER_LEVEL = 1  # Minimum lines per level
+MAX_LINES_PER_LEVEL = 20  # Maximum lines per level
 MAX_LEVEL = 20  # Maximum level (20G)
+
+class GameSettings:
+    """Mutable game settings."""
+    def __init__(self):
+        self.lines_per_level = DEFAULT_LINES_PER_LEVEL
+
+SETTINGS = GameSettings()
+
+# Text settings
+LINES_PER_LEVEL_TEXT = "レベルアップまでの行数"
+LINES_PER_LEVEL_TEXT_EN = "Lines per Level"
 
 def calculate_fall_speed(level: int) -> float:
     """Calculate fall speed based on level.
